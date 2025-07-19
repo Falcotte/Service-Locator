@@ -13,5 +13,10 @@ namespace AngryKoala.Services
         {
             ServiceLocator.Register<T>(this);
         }
+        
+        public void Deregister()
+        {
+            ServiceLocator.Deregister<T>(this);
+        }
     }
 }
