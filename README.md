@@ -4,6 +4,8 @@ A lightweight, extensible Service Locator architecture for Unity that enables cl
 
 This system is designed for projects that require centralized service management, editor-time inspection, and automatic registration/deregistration of services.
 
+---
+
 ## ✨ Features
 
 ### Generic Service Locator
@@ -26,11 +28,13 @@ This system is designed for projects that require centralized service management
 
 * "Ping" button to locate service instances in the Hierarchy.
 
+---
+
 ## 🧩 Architecture Overview
 
 ### Core Components
 
-```IService```
+#### ```IService```
 
 Defines the base interface that all services must implement:
 
@@ -44,9 +48,9 @@ public interface IService
 
 Every service is expected to self-register and deregister using these methods
 
-```BaseService<T>```
+#### ```BaseService<T>```
 
-A generic abstract MonoBehaviour that implements IService and provides automatic registration logic:
+A generic abstract MonoBehaviour that implements `IService` and provides automatic registration logic:
 
 ```
 public abstract class BaseService<T> : MonoBehaviour, IService where T : IService
@@ -66,9 +70,9 @@ public abstract class BaseService<T> : MonoBehaviour, IService where T : IServic
 }
 ```
 
-This allows you to simply inherit from BaseService<T> and have your service automatically appear in the locator
+This allows you to simply inherit from `BaseService<T>` and have your service automatically appear in the locator
 
-```ServiceLocator```
+#### ```ServiceLocator```
 
 A static class that maintains a global dictionary of registered services:
 
@@ -79,6 +83,7 @@ public static class ServiceLocator
 
     public static void Register<T>(IService service);
     public static void Deregister<T>(IService service);
+    
     public static T Get<T>() where T : IService;
 }
 ```
@@ -89,7 +94,7 @@ public static class ServiceLocator
 
 * Provides a safe lookup API with warnings for unregistered service requests
 
-```ServiceInspectorEditorWindow```
+#### ```ServiceInspectorEditorWindow```
 
 A Unity Editor tool to **inspect**, **refresh**, and **ping** all registered services in play mode.
 
@@ -112,6 +117,8 @@ Open it via:
 ```
 Menu → Angry Koala → Services → Service Inspector
 ```
+
+---
 
 ## 🧠 Usage Example
 
@@ -137,8 +144,8 @@ public class AudioService : BaseService<IAudioService>, IAudioService
 
 ### 2. Register Automatically
 
-Attach your service script (e.g., AudioService) to a GameObject in your scene.
-If _autoRegister is checked, it will be registered automatically on Awake().
+Attach your service script (e.g., `AudioService`) to a GameObject in your scene.
+If `_autoRegister` is checked, it will be registered automatically on `Awake()`.
 
 ### 3. Retrieve Anywhere
 
@@ -157,24 +164,28 @@ Menu → Angry Koala → Services → Service Inspector
 
 You’ll see all currently registered services in a structured table.
 
+---
+
 ## 🧱 Extending the System
 
 You can safely extend the system by:
 
-* Creating custom editor visualizations using ServiceLocator.Services.
+* Creating custom editor visualizations using `ServiceLocator.Services`.
 
-* Adding new events or debug tools tied to OnServiceRegistered / OnServiceDeregistered.
+* Adding new events or debug tools tied to `OnServiceRegistered`/`OnServiceDeregistered`.
 
 * Implementing service interfaces to enforce project-wide contracts.
+
+---
 
 ## 🪲 Debugging Tips
 
 * If a service doesn’t appear in the inspector:
 
-  * Ensure autoRegister is enabled or call Register() manually.
+  * Ensure `_autoRegister` is enabled or call `Register()` manually.
 
-  * Verify the service implements IService correctly.
+  * Verify the service implements `IService` correctly.
 
 * Duplicate registration logs a warning but doesn’t overwrite the existing service.
 
-* The inspector only works in play mode.
+* The inspector only works **in play mode**.
