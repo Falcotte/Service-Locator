@@ -79,7 +79,7 @@ A static class that maintains a global dictionary of registered services:
 ```
 public static class ServiceLocator
 {
-    public static IReadOnlyDictionary<Type, IService> Services => _services;
+    private static readonly Dictionary<Type, IService> _servicesByType = new();
 
     public static void Register<T>(IService service);
     public static void Deregister<T>(IService service);
@@ -170,7 +170,7 @@ You’ll see all currently registered services in a structured table.
 
 You can safely extend the system by:
 
-* Creating custom editor visualizations using `ServiceLocator.Services`.
+* Creating custom editor visualizations using `_servicesByType`.
 
 * Adding new events or debug tools tied to `OnServiceRegistered`/`OnServiceDeregistered`.
 
